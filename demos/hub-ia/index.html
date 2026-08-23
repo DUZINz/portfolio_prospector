@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hub de Atendimento &amp; IA — Demonstração | Eduardo Grunitzky</title>
+  <meta name="description" content="Demonstração interativa de um hub de atendimento com assistente de IA: responda no WhatsApp 24/7, cite a fonte na base treinada e escale para humano quando precisar." />
+  <meta name="robots" content="noindex" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/demos/demos.css" />
+</head>
+<body data-demo-nome="Hub de Atendimento &amp; IA">
+  <!-- A barra de topo das demos é inserida aqui por /demos/demos.js -->
+
+  <main class="demo-shell">
+    <header class="demo-head">
+      <p class="demo-head__tipo">Automação · Inteligência Artificial</p>
+      <h1 class="demo-head__titulo">Hub de Atendimento &amp; Assistente de IA</h1>
+      <p class="demo-head__sub">
+        Central de atendimento inteligente para WhatsApp. A IA tira dúvidas do
+        catálogo, qualifica o lead e agenda atendimentos 24/7 com base nas
+        regras da sua empresa. Pergunte alguma coisa — ela responde na hora e
+        mostra de qual documento tirou a resposta.
+      </p>
+    </header>
+
+    <div class="hub">
+      <!-- ============ conversa ============ -->
+      <section class="painel">
+        <header class="painel__head">
+          <div>
+            <h2 class="painel__titulo">Conversa · WhatsApp</h2>
+            <p class="painel__nota" id="sessao"></p>
+          </div>
+          <span class="status status--concluido" id="situacao">Online</span>
+        </header>
+
+        <div class="chat__log" id="log" aria-live="polite" aria-label="Histórico da conversa">
+          <!-- Mensagens montadas por app.js -->
+        </div>
+
+        <form class="chat__form" id="form-chat">
+          <input class="busca" id="pergunta" type="text" maxlength="300"
+                 autocomplete="off"
+                 placeholder="Pergunte sobre preço, prazo, horário ou agendamento…"
+                 aria-label="Escreva sua pergunta para o assistente" />
+          <button type="submit" class="btn btn--accent btn--small">Enviar</button>
+        </form>
+
+        <div class="chat__sugestoes" id="sugestoes" aria-label="Perguntas sugeridas">
+          <!-- Sugestões montadas por app.js -->
+        </div>
+      </section>
+
+      <!-- ============ métricas + base ============ -->
+      <div class="hub__lado">
+        <section class="metricas" aria-label="Indicadores do atendimento">
+          <div class="metrica">
+            <p class="metrica__rotulo">Conversas hoje</p>
+            <p class="metrica__valor">128</p>
+            <p class="metrica__nota metrica__nota--sobe">+22% vs. a média do mês</p>
+          </div>
+          <div class="metrica">
+            <p class="metrica__rotulo">Tempo médio de resposta</p>
+            <p class="metrica__valor">1,2s</p>
+            <p class="metrica__nota">contra 14 min do atendimento manual</p>
+          </div>
+          <div class="metrica">
+            <p class="metrica__rotulo">Resolução sem atendente</p>
+            <p class="metrica__valor">84%</p>
+            <p class="metrica__nota">só 1 em cada 6 chega a um humano</p>
+          </div>
+        </section>
+
+        <section class="painel">
+          <header class="painel__head">
+            <div>
+              <h2 class="painel__titulo">Tópicos treinados</h2>
+              <p class="painel__nota">O documento usado na última resposta acende.</p>
+            </div>
+          </header>
+
+          <ul class="topicos" id="topicos">
+            <!-- Tópicos montados por app.js -->
+          </ul>
+
+          <button type="button" class="btn btn--fantasma btn--small hub__humano" id="humano">
+            Testar gatilho de atendimento humano
+          </button>
+        </section>
+      </div>
+    </div>
+
+    <footer class="demo-rodape">
+      <p>
+        Demonstração com dados fictícios: as respostas saem de uma base fixa
+        aqui no navegador, sem chamar nenhuma API. No sistema real o assistente
+        é treinado nos seus documentos, responde no WhatsApp de verdade e passa
+        para um humano com o histórico junto quando a pergunta foge da base.
+      </p>
+      <button type="button" class="demo-reset" data-demo-reset="demo-hub-ia">
+        Restaurar dados da demo
+      </button>
+    </footer>
+  </main>
+
+  <script src="/js/script.js"></script>
+  <script src="/demos/demos.js"></script>
+  <script src="/demos/hub-ia/app.js"></script>
+</body>
+</html>

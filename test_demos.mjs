@@ -146,4 +146,60 @@ const barras = dash.montarGraficoBarras(dash.MESES);
 assert.equal(barras.match(/class="barra-cat"/g).length, dash.CATEGORIAS.length);
 assert.ok(!/NaN|undefined/.test(barras), "coordenada invalida no SVG");
 
+/* ============================ hub de ia ============================ */
+
+const hub = carregar("demos/hub-ia/app.js", [
+  "TOPICOS", "BASE", "SUGESTOES", "CONVERSA_SEMENTE",
+  "normalizar", "responder", "resumirConversa", "nomeTopico",
+]);
+
+assert.equal(hub.TOPICOS.length, 6);
+// Toda resposta da base cita um topico que existe de verdade.
+hub.BASE.forEach((item) => {
+  assert.ok(hub.TOPICOS.some((t) => t.id === item.fonte), `fonte desconhecida: ${item.fonte}`);
+  assert.ok(item.texto.length > 40, "resposta curta demais");
+});
+
+// Acento e caixa nao atrapalham o casamento de palavra-chave.
+assert.equal(hub.normalizar("PREÇOS e Automação"), "precos e automacao");
+assert.equal(hub.responder("Quanto custa?").fonte, "precos");
+assert.equal(hub.responder("QUANTO CUSTA?").fonte, "precos");
+assert.equal(hub.responder("qual o prazo de entrega?").fonte, "catalogo");
+assert.equal(hub.responder("vocês atendem sábado?").fonte, "atendimento");
+assert.equal(hub.responder("quero agendar uma conversa").fonte, "agenda");
+
+// Pedido explicito de humano ganha do resto — mesmo quando cita "valor".
+assert.ok(hub.responder("quero falar com uma pessoa real").humano);
+assert.ok(hub.responder("qual o valor? prefiro um atendente").humano);
+// Pergunta comum nao dispara o gatilho.
+assert.ok(!hub.responder("quanto custa um sistema?").humano);
+
+// Fora da base: nao inventa, nao cita fonte e escala para humano.
+const fora = hub.responder("vocês vendem bicicleta elétrica?");
+assert.equal(fora.fonte, null);
+assert.ok(fora.humano);
+assert.ok(/não inventar/.test(fora.texto), fora.texto);
+
+// Toda sugestao da tela tem que ter resposta na base: botao que cai no
+// fallback entregaria a demo na primeira tentativa do visitante.
+hub.SUGESTOES.forEach((s) => {
+  const r = hub.responder(s);
+  assert.ok(r.fonte, `sugestão sem resposta na base: ${s}`);
+  assert.ok(!r.humano, `sugestão escalando para humano: ${s}`);
+});
+
+// Conversa semente: 4 perguntas, 4 respostas, nenhuma fonte inventada.
+assert.equal(hub.CONVERSA_SEMENTE.length, 8);
+hub.CONVERSA_SEMENTE.filter((m) => m.de === "ia").forEach((m) =>
+  assert.ok(hub.TOPICOS.some((t) => t.id === m.fonte), `fonte solta: ${m.fonte}`)
+);
+const conversa = hub.resumirConversa(hub.CONVERSA_SEMENTE);
+assert.equal(conversa.perguntas, 4);
+assert.equal(conversa.respostas, 4);
+assert.ok(!conversa.humano, "conversa semente comeca sem atendente");
+assert.ok(hub.resumirConversa([{ de: "sistema", texto: "x" }]).humano);
+
+assert.equal(hub.nomeTopico("precos"), "Tabela de Preços 2026.2");
+assert.equal(hub.nomeTopico("inexistente"), "");
+
 console.log("demos ok");

@@ -70,7 +70,7 @@ const PROJETOS = [
     tipo: "Sistema Web / Gestão",
     tags: ["React", "TypeScript", "Node.js", "PostgreSQL"],
     link: "/demos/painel-gestao",
-    cta: "Abrir demonstração",
+    cta: "Ver demonstração",
     imagem_capa: "assets/mock-painel-os.svg",
     descricao_curta:
       "Acaba com a planilha compartilhada: ordens de serviço com status, histórico por cliente, níveis de acesso por equipe e relatórios prontos para o fechamento do mês.",
@@ -82,7 +82,7 @@ const PROJETOS = [
     tipo: "Sistema Web / Vendas",
     tags: ["Next.js", "Tailwind CSS", "REST APIs"],
     link: "/demos/crm-vendas",
-    cta: "Abrir demonstração",
+    cta: "Ver demonstração",
     imagem_capa: "assets/mock-crm-kanban.svg",
     descricao_curta:
       "Nenhum lead esquecido no meio do funil: cartões arrastáveis por etapa, histórico de cada interação e métricas de conversão por origem e por vendedor.",
@@ -94,7 +94,7 @@ const PROJETOS = [
     tipo: "Dashboard / Métricas",
     tags: ["React", "Recharts", "API de Pagamentos"],
     link: "/demos/dashboard-financeiro",
-    cta: "Abrir demonstração",
+    cta: "Ver demonstração",
     imagem_capa: "assets/mock-dashboard-financeiro.svg",
     descricao_curta:
       "Faturamento, fluxo de caixa e inadimplência em tempo real numa tela só, com alertas operacionais avisando antes de o problema virar prejuízo.",
@@ -105,7 +105,8 @@ const PROJETOS = [
     segmento: "IA",
     tipo: "Automação / IA",
     tags: ["Python", "OpenAI/Claude API", "Webhooks"],
-    link: null,
+    link: "/demos/hub-ia",
+    cta: "Ver demonstração",
     imagem_capa: "assets/mock-hub-atendimento-ia.svg",
     descricao_curta:
       "Todas as conversas de WhatsApp da empresa em um só painel, com uma IA treinada na sua base respondendo o repetitivo e passando para um humano o que importa.",
