@@ -31,6 +31,20 @@ function aplicarLinksDeContato() {
 
 const FILTRO_TODOS = "todos";
 
+/* Rota de demo aqui do próprio site (e não um cliente publicado). */
+const temDemo = (p) => typeof p.link === "string" && p.link.startsWith("/demos/");
+
+/*
+ * Texto da barra de endereço da moldura de janela. Sempre o endereço real —
+ * domínio publicado para site no ar, a própria rota para a demo. Projeto sem
+ * link nenhum fica com a barra vazia em vez de um domínio inventado.
+ */
+function urlDaJanela(p) {
+  if (!p.link) return "";
+  if (p.link.startsWith("/")) return p.link;
+  return p.link.replace(/^https?:\/\//, "").replace(/\/$/, "");
+}
+
 /*
  * Projeto sem `link` não tem demo pública: o botão vira um convite de
  * orçamento no WhatsApp já com o nome do modelo na mensagem.
@@ -41,6 +55,8 @@ function montarAcaoDoProjeto(p) {
       href: p.link,
       rotulo: p.cta || "Ver projeto ao vivo",
       externo: true,
+      // Demo navegável é a ação mais valiosa do card: vira botão cheio.
+      destaque: temDemo(p),
     };
   }
   return {
@@ -57,19 +73,29 @@ function montarCard(p) {
   const tags = (p.tags || [])
     .map((t) => `<li class="card__tag">${t}</li>`)
     .join("");
+  const url = urlDaJanela(p);
 
   return `
     <article class="card" data-categoria="${p.categoria}" data-reveal>
-      <div class="card__capa-wrap">
-        <img class="card__capa" src="${p.imagem_capa}" alt="Prévia de ${p.nome_cliente}" loading="lazy" />
-        <span class="card__segmento">${p.segmento}</span>
+      <div class="janela">
+        <div class="janela__barra" aria-hidden="true">
+          <span class="janela__ponto janela__ponto--r"></span>
+          <span class="janela__ponto janela__ponto--a"></span>
+          <span class="janela__ponto janela__ponto--v"></span>
+          ${url ? `<span class="janela__url">${url}</span>` : ""}
+        </div>
+        <div class="card__capa-wrap">
+          <img class="card__capa" src="${p.imagem_capa}" alt="Prévia de ${p.nome_cliente}" loading="lazy" />
+          <span class="card__segmento">${p.segmento}</span>
+          ${acao.destaque ? '<span class="card__aovivo">Testar sistema ao vivo</span>' : ""}
+        </div>
       </div>
       <div class="card__corpo">
         ${p.tipo ? `<p class="card__tipo">${p.tipo}</p>` : ""}
         <h3 class="card__nome">${p.nome_cliente}</h3>
         <p class="card__descricao">${p.descricao_curta}</p>
         ${tags ? `<ul class="card__tags">${tags}</ul>` : ""}
-        <a class="btn btn--fantasma btn--small card__acao"
+        <a class="btn btn--small card__acao${acao.destaque ? " card__acao--destaque" : " btn--fantasma"}"
            href="${acao.href}"
            ${acao.externo ? 'target="_blank" rel="noopener"' : ""}>
           ${acao.rotulo} <span aria-hidden="true">→</span>
@@ -209,15 +235,25 @@ function montarBriefing(base, extras) {
   return linhas.join("\n");
 }
 
+/*
+ * `destaque` (em data/precos.js) é o rótulo do selo — "Sistema web", "IA",
+ * "Automação". Item sem selo sai no visual neutro de sempre.
+ */
 function montarOpcao(item, indice, tipo) {
   const multipla = tipo === "extra";
+  const selo = item.destaque
+    ? `<span class="opcao__selo">${item.destaque}</span>`
+    : "";
   return `
-    <label class="opcao">
+    <label class="opcao${item.destaque ? " opcao--destaque" : ""}">
       <input type="${multipla ? "checkbox" : "radio"}" name="${tipo}"
              value="${indice}" ${!multipla && indice === 0 ? "checked" : ""} />
       <span class="opcao__nome">${item.nome}</span>
       <span class="opcao__preco">${multipla ? "+ " : ""}${MOEDA.format(item.preco)}</span>
-      <span class="opcao__prazo">${multipla ? "+" : ""}${item.dias} dias</span>
+      <span class="opcao__meta">
+        ${selo}
+        <span class="opcao__prazo">${multipla ? "+" : ""}${item.dias} dias</span>
+      </span>
     </label>`;
 }
 
