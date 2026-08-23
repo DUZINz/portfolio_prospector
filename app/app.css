@@ -1,0 +1,602 @@
+/* ========================================================================
+   Prospector — painel de bolso (/app)
+   Mobile-first de verdade: o desktop e que ganha media query, nao o contrario.
+   Alvo de toque minimo de 48px em tudo que se clica com o polegar.
+   ======================================================================== */
+
+:root {
+  --bg: #0b0a09;
+  --bg-2: #151310;
+  --bg-3: #1d1a15;
+  --fg: #f4f1ea;
+  --fg-fraco: #a89f8f;
+  --acento: #d4a24c;
+  --acento-forte: #e8b768;
+  --verde: #25d366;
+  --verde-forte: #3ee07c;
+  --alerta: #c9705a;
+  --borda: #2a2621;
+
+  --sans: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --raio: 12px;
+  --raio-sm: 9px;
+  --toque: 48px; /* piso de alvo de toque */
+
+  /* Faixas que o notch e a barra de gestos comem. Sem isto o topo fica atras
+     do relogio e o FAB atras da barra de home no iPhone. */
+  --topo-seguro: env(safe-area-inset-top, 0px);
+  --base-segura: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  /* Sem isto o iOS deixa a pagina "puxar" e o app parece uma pagina web. */
+  overscroll-behavior-y: none;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------------------------------- botoes ---------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: var(--toque);
+  padding: 0.7em 1.2em;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+  border-radius: var(--raio-sm);
+  cursor: pointer;
+  /* Tira o flash cinza do toque no Android/iOS. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn--acento {
+  background: linear-gradient(180deg, var(--acento-forte), var(--acento));
+  color: #171310;
+}
+
+.btn--fantasma {
+  background: transparent;
+  border-color: var(--borda);
+  color: var(--fg);
+}
+
+.btn--lista {
+  width: 100%;
+  justify-content: flex-start;
+  background: var(--bg-3);
+  border-color: var(--borda);
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.btn--lista:active { background: #262119; }
+.btn--lista-fraco { color: var(--fg-fraco); }
+
+/* ---------------------------------- trava ---------------------------------- */
+
+.trava {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: calc(var(--topo-seguro) + 2rem) 1.25rem 2rem;
+  background:
+    radial-gradient(30rem 22rem at 50% 12%, rgba(212, 162, 76, 0.13), transparent 65%),
+    var(--bg);
+}
+
+.trava[hidden] { display: none; }
+
+.trava__caixa {
+  width: min(22rem, 100%);
+  display: grid;
+  gap: 0.9rem;
+  padding: 1.6rem 1.4rem;
+  background: var(--bg-2);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+}
+
+.trava__marca {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--acento);
+}
+
+.trava__titulo {
+  margin: 0 0 0.4rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.trava__nota {
+  margin: 0.2rem 0 0;
+  font-size: 0.76rem;
+  color: var(--fg-fraco);
+}
+
+/* Chacoalha na senha errada: feedback sem ocupar espaco na tela. */
+.trava.is-erro .trava__caixa {
+  animation: tremer 0.4s ease;
+  border-color: var(--alerta);
+}
+
+@keyframes tremer {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-7px); }
+  40%, 80% { transform: translateX(7px); }
+}
+
+/* ---------------------------------- campos ---------------------------------- */
+
+.campo {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-fraco);
+}
+
+.campo input {
+  min-height: var(--toque);
+  padding: 0.6em 0.85em;
+  font-family: var(--sans);
+  /* 16px trava o zoom automatico do iOS ao focar o campo. */
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-sm);
+}
+
+.campo input:focus {
+  outline: none;
+  border-color: var(--acento);
+}
+
+/* ---------------------------------- topo ---------------------------------- */
+
+.app[hidden] { display: none; }
+
+.topo {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  gap: 0.7rem;
+  padding: calc(var(--topo-seguro) + 0.8rem) 1rem 0.7rem;
+  background: rgba(11, 10, 9, 0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--borda);
+}
+
+.topo__linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.topo__nome {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.topo__botoes {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.icone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  min-height: var(--toque);
+  min-width: var(--toque);
+  justify-content: center;
+  padding: 0 0.8em;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--fg);
+  background: var(--bg-3);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-sm);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.icone__txt { font-size: 0.8rem; }
+
+.busca {
+  width: 100%;
+  min-height: var(--toque);
+  padding: 0.6em 0.9em;
+  font-family: var(--sans);
+  font-size: 16px;
+  color: var(--fg);
+  background: var(--bg-2);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-sm);
+}
+
+.busca:focus { outline: none; border-color: var(--acento); }
+.busca::placeholder { color: var(--fg-fraco); }
+
+/* Rola na horizontal em vez de quebrar em duas linhas e comer a tela. */
+.filtros {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: 0 -1rem;
+  padding: 0 1rem 0.2rem;
+}
+
+.filtros::-webkit-scrollbar { display: none; }
+
+.chip {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  min-height: 40px;
+  padding: 0 0.85em;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--fg-fraco);
+  background: var(--bg-2);
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.chip.is-ativo {
+  background: linear-gradient(180deg, var(--acento-forte), var(--acento));
+  border-color: transparent;
+  color: #171310;
+}
+
+.chip__n {
+  font-size: 0.72rem;
+  opacity: 0.72;
+}
+
+.contador {
+  margin: 0.9rem 1rem 0.5rem;
+  font-size: 0.78rem;
+  color: var(--fg-fraco);
+}
+
+/* ---------------------------------- leads ---------------------------------- */
+
+.leads {
+  list-style: none;
+  margin: 0;
+  padding: 0 1rem calc(var(--base-segura) + 6rem);
+  display: grid;
+  gap: 0.8rem;
+}
+
+.lead {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.9rem;
+  background: var(--bg-2);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+}
+
+.lead__topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.lead__quem { min-width: 0; }
+
+.lead__empresa {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.lead__contato {
+  margin: 0.15rem 0 0;
+  font-size: 0.82rem;
+  color: var(--fg-fraco);
+}
+
+.tag {
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35em 0.65em;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+}
+
+.tag--novo { color: var(--fg-fraco); }
+.tag--contatado { color: var(--acento); }
+.tag--followup { color: var(--alerta); }
+.tag--interessado { color: var(--verde-forte); }
+.tag--reuniao { color: var(--verde-forte); }
+.tag--fechado { color: var(--verde); }
+.tag--arquivado { color: #6b645a; }
+
+.lead__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+}
+
+.selo {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  padding: 0.28em 0.6em;
+  border-radius: var(--raio-sm);
+  border: 1px solid var(--borda);
+  background: rgba(255, 255, 255, 0.035);
+  text-decoration: none;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selo--sem { color: var(--alerta); border-color: rgba(201, 112, 90, 0.4); }
+.selo--site { color: var(--acento); border-color: rgba(212, 162, 76, 0.4); }
+
+.lead__quando { color: var(--fg-fraco); }
+
+/* Três colunas de polegar: a ação principal ocupa o dobro das outras. */
+.lead__acoes {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 0.45rem;
+}
+
+.acao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--toque);
+  padding: 0 0.5em;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  color: var(--fg);
+  background: var(--bg-3);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-sm);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.acao:active { background: #262119; }
+
+.acao--zap {
+  background: linear-gradient(180deg, var(--verde-forte), var(--verde));
+  border-color: transparent;
+  color: #06170e;
+}
+
+.acao--off {
+  color: var(--fg-fraco);
+  background: transparent;
+  font-weight: 500;
+  font-size: 0.76rem;
+  cursor: default;
+}
+
+.vazio {
+  display: grid;
+  gap: 0.9rem;
+  justify-items: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--fg-fraco);
+}
+
+.vazio p { margin: 0; }
+
+.btn-linha {
+  min-height: var(--toque);
+  padding: 0 1.2em;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--acento);
+  background: transparent;
+  border: 1px solid var(--acento);
+  border-radius: var(--raio-sm);
+  cursor: pointer;
+}
+
+/* ---------------------------------- FAB ---------------------------------- */
+
+.fab {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(var(--base-segura) + 1rem);
+  z-index: 30;
+  width: 60px;
+  height: 60px;
+  font-size: 2rem;
+  line-height: 1;
+  color: #171310;
+  background: linear-gradient(180deg, var(--acento-forte), var(--acento));
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 12px 28px -10px rgba(0, 0, 0, 0.9);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------------------------------- folhas (dialog) ---------------------------------- */
+
+/*
+ * Bottom sheet: no celular a folha sobe de baixo, que e onde o polegar
+ * alcanca. `margin: auto auto 0` prende no rodape; no desktop volta ao centro.
+ */
+.folha {
+  width: 100%;
+  max-width: 100%;
+  margin: auto auto 0;
+  padding: 0;
+  color: var(--fg);
+  background: var(--bg-2);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio) var(--raio) 0 0;
+  max-height: 92dvh;
+}
+
+.folha::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.folha__corpo {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 1.2rem 1rem calc(var(--base-segura) + 1.2rem);
+  overflow-y: auto;
+}
+
+.folha__titulo {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.folha__sub {
+  margin: -0.3rem 0 0.3rem;
+  font-size: 0.9rem;
+  color: var(--fg-fraco);
+}
+
+.folha__nota {
+  margin: 0.4rem 0 0;
+  font-size: 0.76rem;
+  color: var(--fg-fraco);
+}
+
+.folha__nota code {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.folha__acoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+/* ---------------------------------- toast ---------------------------------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--base-segura) + 5.5rem);
+  z-index: 60;
+  transform: translate(-50%, 1rem);
+  max-width: calc(100vw - 2rem);
+  padding: 0.7rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #171310;
+  background: var(--acento-forte);
+  border-radius: 999px;
+  box-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.toast.is-visivel {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ---------------------------------- desktop ---------------------------------- */
+
+@media (min-width: 720px) {
+  .topo,
+  .contador,
+  .leads {
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+
+  .topo {
+    border-radius: 0 0 var(--raio) var(--raio);
+  }
+
+  .leads {
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
+  }
+
+  .fab {
+    right: calc(50vw - 23rem + 1rem);
+  }
+
+  /* Fora do celular a folha volta a ser modal centrado. */
+  .folha {
+    max-width: 26rem;
+    margin: auto;
+    border-radius: var(--raio);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trava.is-erro .trava__caixa { animation: none; }
+  .toast { transition: none; }
+}

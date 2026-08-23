@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <!-- viewport-fit=cover + os safe-area-inset do CSS: sem isso o iPhone come a
+       barra de baixo com a faixa do gesto de home quando roda como app. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Prospector</title>
+  <meta name="description" content="Painel de bolso do Prospector: leads, disparo de WhatsApp e cadência de follow-up." />
+  <!-- Ferramenta interna com dados de lead: fora do índice de busca. -->
+  <meta name="robots" content="noindex, nofollow" />
+
+  <link rel="manifest" href="/app/manifest.webmanifest" />
+  <meta name="theme-color" content="#0b0a09" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Prospector" />
+  <!-- O Safari não aceita SVG em apple-touch-icon: tem que ser PNG. -->
+  <link rel="apple-touch-icon" href="/app/icone-192.png" />
+  <link rel="icon" href="/app/icone-192.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/app/app.css" />
+</head>
+<body>
+
+  <!-- ============ trava ============ -->
+  <div class="trava" id="trava">
+    <form class="trava__caixa" id="form-pin">
+      <p class="trava__marca">Prospector</p>
+      <h1 class="trava__titulo">Painel de bolso</h1>
+      <label class="campo">
+        PIN
+        <input type="password" id="pin" inputmode="numeric" autocomplete="off"
+               pattern="[0-9]*" placeholder="••••" required />
+      </label>
+      <button type="submit" class="btn btn--acento">Abrir</button>
+      <p class="trava__nota">
+        Trava de tela, não criptografia: os leads ficam neste aparelho e quem
+        abrir o console vê tudo. Serve contra olhar de passagem.
+      </p>
+    </form>
+  </div>
+
+  <!-- ============ app ============ -->
+  <div class="app" id="app" hidden>
+    <header class="topo">
+      <div class="topo__linha">
+        <h1 class="topo__nome">Prospector</h1>
+        <div class="topo__botoes">
+          <button type="button" class="icone" id="tabela" title="Copiar link da Tabela de Preços 2026.2">
+            📄<span class="icone__txt">Tabela</span>
+          </button>
+          <button type="button" class="icone" id="menu" title="Exportar, importar e PIN">
+            ⋯<span class="sr">Mais opções</span>
+          </button>
+        </div>
+      </div>
+
+      <input class="busca" id="busca" type="search" autocomplete="off"
+             placeholder="Buscar nome, empresa, nicho ou telefone…"
+             aria-label="Buscar leads" />
+
+      <nav class="filtros" id="filtros" aria-label="Filtros rápidos">
+        <!-- Chips montados por app.js -->
+      </nav>
+    </header>
+
+    <p class="contador" id="contador" aria-live="polite"></p>
+
+    <ul class="leads" id="leads">
+      <!-- Cards montados por app.js -->
+    </ul>
+
+    <button type="button" class="fab" id="novo" aria-label="Cadastrar novo lead">+</button>
+  </div>
+
+  <!-- ============ novo lead ============ -->
+  <dialog class="folha" id="dlg-lead" aria-labelledby="t-lead">
+    <form class="folha__corpo" id="form-lead" method="dialog">
+      <h2 class="folha__titulo" id="t-lead">Novo lead</h2>
+
+      <label class="campo">Empresa
+        <input type="text" name="empresa" required maxlength="80" placeholder="Padaria Pão Nosso" />
+      </label>
+      <label class="campo">Contato
+        <input type="text" name="contato" maxlength="60" placeholder="Marcelo" />
+      </label>
+      <label class="campo">WhatsApp
+        <input type="tel" name="telefone" required inputmode="tel"
+               placeholder="(41) 99999-8888" />
+      </label>
+      <label class="campo">Site (deixe vazio se não tiver)
+        <input type="url" name="site" placeholder="https://…" />
+      </label>
+      <label class="campo">Nicho
+        <input type="text" name="nicho" maxlength="40" placeholder="Padaria" />
+      </label>
+      <label class="campo">Notas
+        <input type="text" name="notas" maxlength="200" placeholder="Indicação do Rafael" />
+      </label>
+
+      <div class="folha__acoes">
+        <button type="button" class="btn btn--fantasma" data-fechar>Cancelar</button>
+        <button type="submit" class="btn btn--acento">Salvar lead</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ============ status ============ -->
+  <dialog class="folha" id="dlg-acoes" aria-labelledby="t-acoes">
+    <div class="folha__corpo">
+      <h2 class="folha__titulo" id="t-acoes">Status</h2>
+      <p class="folha__sub" id="acoes-nome"></p>
+
+      <button type="button" class="btn btn--lista" data-status="interessado">🔥 Interessado</button>
+      <button type="button" class="btn btn--lista" data-status="reuniao">📅 Reunião agendada</button>
+      <button type="button" class="btn btn--lista" data-status="fechado">✓ Fechado</button>
+      <button type="button" class="btn btn--lista" data-status="arquivado">📥 Arquivar</button>
+      <button type="button" class="btn btn--lista btn--lista-fraco" data-status="novo">↺ Voltar para “Novo”</button>
+
+      <p class="folha__nota">
+        Marcar interessado, reunião, fechado ou arquivado congela a cadência —
+        o app para de sugerir follow-up.
+      </p>
+      <button type="button" class="btn btn--fantasma" data-fechar>Fechar</button>
+    </div>
+  </dialog>
+
+  <!-- ============ menu ============ -->
+  <dialog class="folha" id="dlg-menu" aria-labelledby="t-menu">
+    <div class="folha__corpo">
+      <h2 class="folha__titulo" id="t-menu">Dados e ajustes</h2>
+
+      <button type="button" class="btn btn--lista" id="exp-csv">⬇ Exportar CSV</button>
+      <button type="button" class="btn btn--lista" id="exp-json">⬇ Exportar JSON</button>
+
+      <label class="btn btn--lista" for="arquivo">⬆ Importar CSV ou JSON</label>
+      <input type="file" id="arquivo" accept=".csv,.json,text/csv,application/json" hidden />
+
+      <button type="button" class="btn btn--lista" id="exemplos-menu">✨ Carregar leads de exemplo</button>
+      <button type="button" class="btn btn--lista" id="trocar-pin">🔒 Trocar PIN</button>
+
+      <p class="folha__nota">
+        Este painel não conversa com o <code>funil.db</code> do Prospector no
+        computador — são dois funis separados. A ponte entre eles é o
+        exportar/importar.
+      </p>
+      <button type="button" class="btn btn--fantasma" data-fechar>Fechar</button>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/app/app.js"></script>
+</body>
+</html>
