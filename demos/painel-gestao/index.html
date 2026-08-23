@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Painel de Gestão de OS — Demonstração | Eduardo Grunitzky</title>
+  <meta name="description" content="Demonstração interativa de um painel de gestão de ordens de serviço e clientes: métricas, busca, filtro por status e cadastro de nova OS." />
+  <meta name="robots" content="noindex" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/demos/demos.css" />
+</head>
+<body data-demo-nome="Painel de Gestão de OS">
+  <!-- A barra de topo das demos é inserida aqui por /demos/demos.js -->
+
+  <main class="demo-shell">
+    <header class="demo-head">
+      <p class="demo-head__tipo">Sistema Web · Gestão</p>
+      <h1 class="demo-head__titulo">Painel de Ordens de Serviço</h1>
+      <p class="demo-head__sub">
+        Assistência técnica com 3 técnicos em campo. Tudo o que antes vivia
+        numa planilha compartilhada — status, prazo, responsável e valor —
+        numa tela só. Busque, filtre e cadastre uma OS: é funcional.
+      </p>
+    </header>
+
+    <section class="metricas" id="metricas" aria-label="Indicadores do mês">
+      <!-- Cartões montados por app.js -->
+    </section>
+
+    <div class="barra">
+      <input class="busca" id="busca" type="search"
+             placeholder="Buscar por cliente, serviço, técnico ou nº da OS…"
+             aria-label="Buscar ordens de serviço" />
+      <div class="chips" id="chips" aria-label="Filtrar por status">
+        <!-- Chips montados por app.js -->
+      </div>
+      <button type="button" class="btn btn--accent btn--small" id="nova">
+        + Nova OS
+      </button>
+    </div>
+
+    <p class="painel__nota" id="contador" aria-live="polite"></p>
+
+    <div class="tabela-wrap">
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th scope="col">OS</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Serviço</th>
+            <th scope="col">Responsável</th>
+            <th scope="col">Prazo</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody id="corpo">
+          <!-- Linhas montadas por app.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <dialog class="modal" id="modal" aria-labelledby="modal-titulo">
+      <form class="modal__form" id="form-os" method="dialog">
+        <h2 class="modal__titulo" id="modal-titulo">Nova ordem de serviço</h2>
+
+        <label class="campo">
+          Cliente
+          <input type="text" name="cliente" required maxlength="60"
+                 placeholder="Ex.: Mercado Vila Nova" />
+        </label>
+
+        <label class="campo">
+          Serviço
+          <input type="text" name="servico" required maxlength="120"
+                 placeholder="Ex.: Instalação de 4 câmeras" />
+        </label>
+
+        <label class="campo">
+          Responsável
+          <select name="tecnico">
+            <option>Rafael Lima</option>
+            <option>Carla Souza</option>
+            <option>Diego Martins</option>
+          </select>
+        </label>
+
+        <label class="campo">
+          Valor (R$)
+          <input type="number" name="valor" min="0" step="10" value="500" required />
+        </label>
+
+        <label class="campo">
+          Prazo
+          <input type="date" name="prazo" required />
+        </label>
+
+        <label class="campo">
+          Status
+          <select name="status">
+            <option value="pendente">Pendente</option>
+            <option value="andamento">Em Andamento</option>
+            <option value="concluido">Concluído</option>
+          </select>
+        </label>
+
+        <div class="modal__acoes">
+          <button type="button" class="btn btn--fantasma btn--small" id="cancelar">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn--accent btn--small">
+            Cadastrar OS
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <footer class="demo-rodape">
+      <p>
+        Demonstração com dados fictícios. O que você cadastrar fica salvo só no
+        seu navegador — no sistema real, cada OS grava em banco de dados, com
+        login, permissão por equipe e histórico por cliente.
+      </p>
+      <button type="button" class="demo-reset" data-demo-reset="demo-painel-os">
+        Restaurar dados da demo
+      </button>
+    </footer>
+  </main>
+
+  <script src="/js/script.js"></script>
+  <script src="/demos/demos.js"></script>
+  <script src="/demos/painel-gestao/app.js"></script>
+</body>
+</html>

@@ -11,8 +11,9 @@
  *   segmento         — categoria curta (badge sobre a capa do card)
  *   tipo             — classificação da entrega (ex.: "Sistema Web / Gestão")
  *   tags             — tecnologias usadas (lista de strings, vira chip no card)
- *   link             — URL publicada. Deixe null quando não houver demo online:
- *                      o card cai automaticamente no CTA de WhatsApp.
+ *   link             — URL publicada, ou a rota da demo interativa deste site
+ *                      (ex.: "/demos/painel-gestao"). Deixe null quando não
+ *                      houver nada online: o card cai no CTA de WhatsApp.
  *   cta              — texto do botão. Opcional; tem padrão por categoria.
  *   imagem_capa      — screenshot 1200x900px (.jpg/.png) ou mockup .svg
  *   descricao_curta  — 1-2 frases sobre o problema que o projeto resolve
@@ -68,7 +69,8 @@ const PROJETOS = [
     segmento: "Gestão",
     tipo: "Sistema Web / Gestão",
     tags: ["React", "TypeScript", "Node.js", "PostgreSQL"],
-    link: null,
+    link: "/demos/painel-gestao",
+    cta: "Ver demonstração",
     imagem_capa: "assets/mock-painel-os.svg",
     descricao_curta:
       "Acaba com a planilha compartilhada: ordens de serviço com status, histórico por cliente, níveis de acesso por equipe e relatórios prontos para o fechamento do mês.",
@@ -79,7 +81,8 @@ const PROJETOS = [
     segmento: "Vendas",
     tipo: "Sistema Web / Vendas",
     tags: ["Next.js", "Tailwind CSS", "REST APIs"],
-    link: null,
+    link: "/demos/crm-vendas",
+    cta: "Ver demonstração",
     imagem_capa: "assets/mock-crm-kanban.svg",
     descricao_curta:
       "Nenhum lead esquecido no meio do funil: cartões arrastáveis por etapa, histórico de cada interação e métricas de conversão por origem e por vendedor.",
@@ -90,7 +93,8 @@ const PROJETOS = [
     segmento: "Métricas",
     tipo: "Dashboard / Métricas",
     tags: ["React", "Recharts", "API de Pagamentos"],
-    link: null,
+    link: "/demos/dashboard-financeiro",
+    cta: "Ver demonstração",
     imagem_capa: "assets/mock-dashboard-financeiro.svg",
     descricao_curta:
       "Faturamento, fluxo de caixa e inadimplência em tempo real numa tela só, com alertas operacionais avisando antes de o problema virar prejuízo.",

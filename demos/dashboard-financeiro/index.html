@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard Financeiro — Demonstração | Eduardo Grunitzky</title>
+  <meta name="description" content="Demonstração interativa de um dashboard financeiro: faturamento, ticket médio, despesas e gráficos de receita mês a mês." />
+  <meta name="robots" content="noindex" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/demos/demos.css" />
+</head>
+<body data-demo-nome="Dashboard Financeiro & Indicadores">
+  <!-- A barra de topo das demos é inserida aqui por /demos/demos.js -->
+
+  <main class="demo-shell">
+    <header class="demo-head">
+      <p class="demo-head__tipo">Dashboard · Métricas</p>
+      <h1 class="demo-head__titulo">Dashboard Financeiro</h1>
+      <p class="demo-head__sub">
+        Faturamento, despesa e margem na mesma tela, sem fechar planilha no fim
+        do mês. Troque o período e passe o mouse pelo gráfico para ver o número
+        de cada mês.
+      </p>
+    </header>
+
+    <div class="barra">
+      <div class="chips" id="periodos" aria-label="Selecionar período">
+        <button type="button" class="filtro" data-periodo="6">Últimos 6 meses</button>
+        <button type="button" class="filtro" data-periodo="12">Últimos 12 meses</button>
+      </div>
+    </div>
+
+    <section class="metricas" id="metricas" aria-label="Indicadores do período">
+      <!-- Cartões montados por app.js -->
+    </section>
+
+    <div class="graficos graficos--duplo">
+      <section class="painel">
+        <header class="painel__head">
+          <div>
+            <h2 class="painel__titulo">Receita × despesa</h2>
+            <p class="painel__nota">Valores fechados mês a mês.</p>
+          </div>
+        </header>
+        <div class="grafico" id="linha">
+          <!-- SVG montado por app.js -->
+        </div>
+        <ul class="legenda">
+          <li class="legenda__receita">Receita</li>
+          <li class="legenda__despesa">Despesa</li>
+        </ul>
+      </section>
+
+      <section class="painel">
+        <header class="painel__head">
+          <div>
+            <h2 class="painel__titulo">Receita por serviço</h2>
+            <p class="painel__nota" id="nota-barras"></p>
+          </div>
+        </header>
+        <div class="grafico" id="barras">
+          <!-- SVG montado por app.js -->
+        </div>
+      </section>
+    </div>
+
+    <footer class="demo-rodape">
+      <p>
+        Demonstração com dados fictícios. No sistema real os números vêm da API
+        do meio de pagamento e do seu ERP, atualizados sozinhos — com alerta
+        automático quando a margem cai abaixo do limite que você definir.
+      </p>
+    </footer>
+  </main>
+
+  <script src="/js/script.js"></script>
+  <script src="/demos/demos.js"></script>
+  <script src="/demos/dashboard-financeiro/app.js"></script>
+</body>
+</html>

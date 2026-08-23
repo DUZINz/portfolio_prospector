@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CRM de Vendas em Kanban — Demonstração | Eduardo Grunitzky</title>
+  <meta name="description" content="Demonstração interativa de um CRM de vendas em quadro Kanban: leads por etapa, valor de proposta, tags de origem e follow-up." />
+  <meta name="robots" content="noindex" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/demos/demos.css" />
+</head>
+<body data-demo-nome="CRM & Pipeline de Vendas Kanban">
+  <!-- A barra de topo das demos é inserida aqui por /demos/demos.js -->
+
+  <main class="demo-shell">
+    <header class="demo-head">
+      <p class="demo-head__tipo">Sistema Web · Vendas</p>
+      <h1 class="demo-head__titulo">Pipeline de Vendas</h1>
+      <p class="demo-head__sub">
+        Todo lead que entra tem etapa, valor e dono. Arraste um cartão entre as
+        colunas (ou use as setas ‹ ›) e veja o total de cada etapa e as métricas
+        do funil recalcularem na hora.
+      </p>
+    </header>
+
+    <section class="metricas" id="metricas" aria-label="Indicadores do funil">
+      <!-- Cartões montados por app.js -->
+    </section>
+
+    <div class="kanban" id="kanban">
+      <!-- Colunas montadas por app.js -->
+    </div>
+
+    <footer class="demo-rodape">
+      <p>
+        Demonstração com dados fictícios, salva só no seu navegador. No sistema
+        real cada etapa dispara automação — proposta enviada por e-mail,
+        lembrete de follow-up no WhatsApp e relatório de conversão por vendedor.
+      </p>
+      <button type="button" class="demo-reset" data-demo-reset="demo-crm-vendas">
+        Restaurar dados da demo
+      </button>
+    </footer>
+  </main>
+
+  <script src="/js/script.js"></script>
+  <script src="/demos/demos.js"></script>
+  <script src="/demos/crm-vendas/app.js"></script>
+</body>
+</html>
